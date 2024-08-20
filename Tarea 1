@@ -1,0 +1,7 @@
+def horner(coeffs,x):
+    acc=0  # Indent this line to be part of the function
+    for c in reversed(coeffs):
+        acc=acc*x+c
+    return acc  # Move return statement outside the loop
+
+print (horner ((-19,7,-4,6),3)) # Call the function outside the function definition
