@@ -1,0 +1,63 @@
+import math
+import pandas as pd
+
+def cos_taylor_series(x, tolerance, max_iter=1000):
+    """Calcula cos(x) usando la serie de Taylor con una tolerancia dada."""
+    term = 1  # Primer término de la serie
+    sum_series = term
+    n = 1
+    table = []
+    
+    while abs(term) > tolerance and n < max_iter:
+        term = ((-1)**n) * (x**(2*n)) / math.factorial(2*n)
+        sum_series += term
+        error_relative = abs(sum_series - math.cos(x)) / abs(math.cos(x))
+        table.append((x, n, sum_series, error_relative))
+        n += 1
+    
+    return sum_series, table
+
+def cos_partial_sum(x, terms=10):
+    """Calcula cos(x) sumando un número fijo de términos."""
+    sum_series = 0
+    table = []
+    
+    for n in range(terms):
+        term = ((-1)**n) * (x**(2*n)) / math.factorial(2*n)
+        sum_series += term
+        error_relative = abs(sum_series - math.cos(x)) / abs(math.cos(x))
+        table.append((x, n, sum_series, error_relative))
+    
+    return sum_series, table
+
+def generate_tables(x_values, tolerance, partial_terms):
+    tables = {"direct_series": [], "partial_sum": []}
+    
+    for x in x_values:
+        _, direct_table = cos_taylor_series(x, tolerance)
+        _, partial_table = cos_partial_sum(x, partial_terms)
+        
+        tables["direct_series"].extend(direct_table)
+        tables["partial_sum"].extend(partial_table)
+    
+    return tables
+
+# Configuración de valores
+x_values = [0.1, 1, 10, 100]
+tolerances = [1e-4, 1e-8]
+partial_terms = 10
+
+for tolerance in tolerances:
+    tables = generate_tables(x_values, tolerance, partial_terms)
+    
+    # Convertir a DataFrame para mejor visualización
+    df_direct = pd.DataFrame(tables["direct_series"], columns=["x", "iteración", "suma", "|suma-cos(x)|/cos(x)"])
+    df_partial = pd.DataFrame(tables["partial_sum"], columns=["x", "iteración", "suma", "|suma-cos(x)|/cos(x)"])
+    
+    # Mostrar resultados
+    print(f"--- Resultados con tolerancia {tolerance} ---")
+    print("\nSerie Directa:")
+    print(df_direct)
+    print("\nComputación Parcial:")
+    print(df_partial)
+    print("\n" + "-"*50 + "\n")
