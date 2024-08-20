@@ -1,7 +1,15 @@
-def horner(coeffs,x):
-    acc=0  # Indent this line to be part of the function
+def def horner(coeffs, x):
+    acc = 0
     for c in reversed(coeffs):
-        acc=acc*x+c
-    return acc  # Move return statement outside the loop
+        acc = acc * x + c
+    return acc
 
-print (horner ((-19,7,-4,6),3)) # Call the function outside the function definition
+# Prueba del código con dos ejemplos diferentes
+# Ejemplo 1: P(x) = -19 + 7x - 4x^2 + 6x^3 evaluado en x = 3
+print(horner((-19, 7, -4, 6), 3))  # Resultado esperado: 128
+
+# Ejemplo 2: P(x) = 1 - 2x + 3x^2 - 4x^3 evaluado en x = 2
+print(horner((1, -2, 3, -4), 2))  # Resultado esperado: -25
+
+# Ejemplo 3: P(x) = 2 + 5x - 3x^2 + x^3 evaluado en x = 1
+print(horner((2, 5, -3, 1), 1))  # Resultado esperado: 5
